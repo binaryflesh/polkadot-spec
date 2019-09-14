@@ -1400,7 +1400,7 @@
 
   The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
   does not specify or limit the internals of each extrinsics. From Polkadot
-  RE point of view, each extrinsics is simply a SCALE encoded byte array (see
+  RE point of view, each extrinsics is simply a SCALE-encoded byte array (see
   Definition <reference|defn-scale-byte-array>).
 
   <subsection|Preliminaries>
@@ -1416,11 +1416,10 @@
 
   Extrinsic submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
-  <reference|sect-msg-transactions>.
-
-  Upon receiving a Transactions message, Polkadot RE decodes the transaction
-  and calls <verbatim|validate_trasaction> runtime function, defined in
-  Section <reference|sect-validate-transaction>, to check the validity of the
+  <reference|sect-msg-transactions>. Upon receiving a Transactions message,
+  Polkadot RE decodes the transaction and calls
+  <verbatim|validate_trasaction> runtime function, defined in Section
+  <reference|sect-validate-transaction>, to check the validity of the
   extrinsic. If <verbatim|validate_transaction> considers the submitted
   extrinsics as a valid one, Polkadot RE makes the extrinsics available for
   the consensus engine for inclusion in future blocks.
@@ -1431,8 +1430,8 @@
   messages<em|<index|Transaction Message>>. This is because the transactions
   are submitted to the node through the <em|transactions> network message
   specified in Section <reference|sect-msg-transactions>. Upon receiving a
-  transactions message, Polkadot RE separate the submitted transactions in
-  the transactions message into individual extrinsics and pass them to the
+  transactions message, Polkadot RE separates the submitted transactions in
+  the transactions message into individual extrinsics and passes them to the
   Runtime by executing Algorithm <reference|algo-validate-transactions> to
   validate and store them for inclusion into future blocks. To that aim,
   Polkodot RE should keep a <em|transaction pool<index|transaction pool>> and
@@ -1525,18 +1524,18 @@
     <item><name|Longest-Chain> is defined in Definition
     <reference|defn-longest-chain>.
 
-    <item><verbatim|TaggedTransactionQueue_validate_transaction> is a runtime
+    <item><verbatim|TaggedTransactionQueue_validate_transaction> is a Runtime
     entry specified in Section <reference|sect-rte-validate-transaction> and
     Requires(R), Priority(R) and Propagate(R) refer to the corresponding
-    fields in the tuple returns by the entry when it deems that <math|T> is
+    fields in the tuple returned by the entry when it deems that <math|T> is
     valid.
 
     <item><name|Provided-Tags>(T) is the list of tags that transaction
-    <math|T> provides. Polkadot RE needs to keep track of tags which
+    <math|T> provides. Polkadot RE needs to keep track of tags that
     transaction <math|T> provides as well as requires after validating it.
 
     <item><name|Insert-At(><math|TQ,T,Requires(R),Priority(R)>) places
-    <math|T> into <math|TQ> approperiatly such that the transactions
+    <math|T> into <math|TQ> approperietly such that the transactions
     providing the tags which <math|T> requires or have higher priority than
     <math|T> are ahead of <math|T>.
 
@@ -1700,10 +1699,10 @@
   Both the Runtime and the Polkadot RE need to work together to assure block
   validity. A block is deemed valid if the block author had the authorship
   right for the slot during which the slot was built as well as if the
-  transactions in the block consititutes a valid transition of states. The
+  transactions in the block constitute a valid transition of states. The
   former criterion is validated by Polkadot RE according to the block
   production consensus protocol. The latter can be verified by Polkadot RE
-  invoking <verbatim|execute_block> entry into the runtime as a part of the
+  invoking <verbatim|execute_block> entry into the Runtime as a part of the
   validation process.
 
   Polkadot RE implements the following procedure to assure the validity of
@@ -1760,7 +1759,7 @@
 
   For the definition of the finality and the finalized block see Section
   <reference|sect-finality>. <math|PBT> is the pruned block tree defined in
-  Definition <reference|defn-block-tree>.<name|Verify-Authorship-Right> is
+  Definition <reference|defn-block-tree>. <name|Verify-Authorship-Right> is
   part of the block production consensus protocol and is described in
   Algorithm <reference|algo-verify-authorship-right>.
 
@@ -1820,8 +1819,8 @@
   <\notation>
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
-    to the <verbatim|duration> field in the \ returned data from the call of
-    runtime entry \ <verbatim|BabeApi_epoch> (see
+    to the <verbatim|duration> field in the returned data from the call of
+    the Runtime entry <verbatim|BabeApi_epoch> (see
     <reference|sect-rte-babeapi-epoch>) at the beginning of each epoch. For a
     given block <math|B>, we use the notation <strong|<math|s<rsub|B>>> to
     refer to the slot during which <math|B> has been produced. Conversely,
@@ -2005,7 +2004,7 @@
     \;
   </definition>
 
-  Block producer includes <math|H<rsub|Babe><around*|(|B|)>> as a log in
+  The block producer includes <math|H<rsub|Babe><around*|(|B|)>> as a log in
   <math|H<rsub|d><around*|(|B|)>> and sign <math|Head<around*|(|B|)>> as
   defined in Definition <reference|defn-block-signature>
 
@@ -2104,15 +2103,14 @@
   </definition>
 
   When a Polkadot node receives a produced block, it needs to verify if the
-  block producer actually was entitled to produce the block in the given slot
-  by means of running Algorithm <reference|algo-verify-authorship-right>
-  where:
+  block producer was entitled to produce the block in the given slot by
+  running Algorithm <reference|algo-verify-authorship-right> where:
 
   <\itemize-minus>
     <item>T<math|<rsub|B>> is <math|B>'s arrival time defined in Definition
     <reference|defn-block-time>.
 
-    <item><math|H<rsub|d><around*|(|B|)>> is the digest sub component of
+    <item><math|H<rsub|d><around*|(|B|)>> is the digest sub-component of
     <math|Head<around*|(|B|)>> defined in Definition
     <reference|defn-block-header>.
 
@@ -2193,11 +2191,11 @@
     </algorithmic>
   </algorithm>
 
-  Algorithm <reference|algo-verify-slot-winner> is run as a part of
-  verification, when a node is importing a block, in which:
+  Algorithm <reference|algo-verify-slot-winner> is run as a part of the
+  verification process, when a node is importing a block, in which:
 
   <\itemize-minus>
-    <item> <name|Epoch-Randomness> is defined in Algorithm
+    <item><name|Epoch-Randomness> is defined in Algorithm
     <reference|algo-epoch-randomness>.
 
     <item><math|H<rsub|BABE><around*|(|B|)>> is the BABE header defined in
@@ -2257,7 +2255,7 @@
 
   <\algorithm>
     <label|algo-build-block><name|Build-Block>(<math|C<rsub|Best>>: The chain
-    at its head the block to be constructed,
+    where at its head, the block to be constructed,
 
     s: Slot number)
   <|algorithm>
@@ -2568,7 +2566,7 @@
     in which either
 
     <\equation*>
-      B<rprime|'>\<gtr\>B
+      B<rprime|'>\<geqslant\>B
     </equation*>
 
     or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
@@ -2639,9 +2637,9 @@
   <subsection|Voting Process in Round <math|r>>
 
   For each round <math|r>, an honest voter <math|v> must participate in the
-  voting process by following Algorithm <reference|alg-grandpa-round>.
+  voting process by following Algorithm <reference|algo-grandpa-round>.
 
-  <\algorithm|<label|alg-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
+  <\algorithm|<label|algo-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
     <\algorithmic>
       <\state>
         <math|t<rsub|r,v>\<leftarrow\>>Time
@@ -2709,6 +2707,15 @@
       </state>
 
       <\state>
+        <name|Attempt-To-Finalize-Round>(<math|r>)
+      </state>
+
+      <\state>
+        <name|Receive-Messages>(<strong|until> <math|r> <strong|is>
+        completable)
+      </state>
+
+      <\state>
         <name|Play-Grandpa-round>(<math|r+1>)
       </state>
     </algorithmic>
@@ -2716,7 +2723,9 @@
 
   The condition of <em|completablitiy> is defined in Definition
   <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
-  is explained in Algorithm <reference|algo-grandpa-best-candidate>.
+  is explained in Algorithm <reference|algo-grandpa-best-candidate> and
+  <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
+  <reference|algo-attempt-to\Ufinalize>.
 
   <\algorithm|<label|algo-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
@@ -2751,7 +2760,7 @@
     </algorithmic>
   </algorithm>
 
-  <\algorithm|<name|Attempt-To-Finalize-Round>(<math|r>)>
+  <\algorithm|<label|algo-attempt-to\Ufinalize><name|Attempt-To-Finalize-Round>(<math|r>)>
     <\algorithmic>
       <\state>
         <math|L\<leftarrow\>><name|Last-Finalized-Block>
@@ -2764,7 +2773,7 @@
       <\state>
         <\IF>
           <math|E\<geqslant\>L> <strong|and>
-          <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<bbb-V\>|\|>>
+          <math|V<rsup|r,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<bbb-V\>|\|>>
         </IF>
       </state>
 
@@ -2816,6 +2825,17 @@
       finalization.\ 
     </itemize>
   </definition>
+
+  for\ 
+
+  <\itemize-dot>
+    <item>any round <math|r> if the node <math|n> is <em|not> a GRANDPA
+    voter.\ 
+
+    <item>only for rounds <math|r> for which the the node <math|n> has
+    invoked Algorithm <reference|algo-grandpa-round> if <math|n> is a GRANDPA
+    voter.
+  </itemize-dot>
 
   Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
   finalizing messages regardless if they are GRANDPA
@@ -4227,9 +4247,9 @@
 
   <\center>
     <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|\<cal-E\><rsub|n>>:>|<cell|epoch
-    index (see Definition <reference|defn-epoch-slot>)>|<cell|64 bit
+    index (see Definition <reference|defn-epoch-slot>)>|<cell|64-bit
     integer>>|<row|<cell|<math|s<rsup|n><rsub|0>:>>|<cell|The index of the
-    starting slot of <math|\<cal-E\><rsub|n>>>|<cell|64 bit
+    starting slot of <math|\<cal-E\><rsub|n>>>|<cell|64-bit
     integer>>|<row|<cell|<math|sc<rsub|n>>:>|<cell|Slot count of
     <math|\<cal-E\><rsub|n>> (see Definition
     <reference|defn-epoch-slot>)>|<cell|1
@@ -4390,11 +4410,13 @@
     <associate|alg-grandpa-round|<tuple|4.9|30>>
     <associate|alg-join-leave-grandpa|<tuple|4.8|29>>
     <associate|algo-aggregate-key|<tuple|2.1|13>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|4.11|?>>
     <associate|algo-block-production|<tuple|4.3|25>>
     <associate|algo-block-production-lottery|<tuple|4.1|24>>
     <associate|algo-build-block|<tuple|4.7|26>>
     <associate|algo-epoch-randomness|<tuple|4.4|26>>
     <associate|algo-grandpa-best-candidate|<tuple|4.10|30>>
+    <associate|algo-grandpa-round|<tuple|4.9|?>>
     <associate|algo-maintain-transaction-pool|<tuple|3.3|?>>
     <associate|algo-pk-length|<tuple|2.2|14>>
     <associate|algo-runtime-interaction|<tuple|3.1|17>>
