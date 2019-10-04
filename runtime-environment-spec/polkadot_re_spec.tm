@@ -5180,6 +5180,10 @@
   still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
 
+  <\the-glossary|gly>
+    \;
+  </the-glossary>
+
   <\bibliography|bib|tm-alpha|polkadot_re_spec>
     <\bib-list|9>
       <bibitem*|Col19><label|bib-collet_extremely_2019>Yann Collet.
@@ -5324,7 +5328,8 @@
     <associate|auto-143|<tuple|G.2|72>>
     <associate|auto-144|<tuple|G.3|72>>
     <associate|auto-145|<tuple|G.3|73>>
-    <associate|auto-146|<tuple|Tec19|75>>
+    <associate|auto-146|<tuple|G.3|75>>
+    <associate|auto-147|<tuple|Tec19|?>>
     <associate|auto-15|<tuple|3.1.2.1|20>>
     <associate|auto-16|<tuple|3.1.2.2|20>>
     <associate|auto-17|<tuple|3.1.2.3|21>>
