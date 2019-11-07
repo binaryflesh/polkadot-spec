@@ -77,6 +77,11 @@ module PdreApiTestFixtures
 	  "test_http",
 	  "test_network_state"
 	]
+
+	const fn_misc_no_input = [
+		"test_chain_id",
+		# "test_random_seed"
+	]
 end
 
 module PdreApiTestData

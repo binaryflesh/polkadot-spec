@@ -6,7 +6,8 @@
 use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::Encode;
-use substrate_primitives::Blake2Hasher;
+use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
+use substrate_offchain::testing::TestOffchainExt;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
@@ -21,6 +22,16 @@ impl MiscApi {
         MiscApi {
             blob: get_wasm_blob(),
             ext: TestExternalities::default(),
+        }
+    }
+    pub fn new_with_offchain_context() -> Self {
+        let mut ext = TestExternalities::default();
+        let (offchain, _) = TestOffchainExt::new();
+        ext.register_extension(OffchainExt::new(offchain));
+
+        MiscApi {
+            blob: get_wasm_blob(),
+            ext: ext,
         }
     }
     fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
@@ -55,10 +66,10 @@ impl MiscApi {
             .prep_wasm("rtm_ext_sleep_until")
             .call(&deadline.encode());
     }
-    pub fn rtm_ext_random_seed(&mut self, seed_data: &[u8]) -> Vec<u8> {
+    pub fn rtm_ext_random_seed(&mut self) -> Vec<u8> {
         self
             .prep_wasm("rtm_ext_random_seed")
-            .call(&seed_data.encode())
+            .call(&[])
             .decode_vec()
     }
 }

@@ -708,8 +708,8 @@ wasm_export_functions! {
         }
     }
 
-    fn rtm_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
-        let mut seed_data = seed_data;
+    fn rtm_ext_random_seed() -> Vec<u8> {
+        let mut seed_data = vec![0;32];
         unsafe {
             ext_random_seed(seed_data.as_mut_ptr());
         }

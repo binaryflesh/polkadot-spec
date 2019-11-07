@@ -330,5 +330,29 @@ using Test
         end
     end
 
+    # ## Test miscellaneous functions
+    for func in PdreApiTestFixtures.fn_network
+        for cli in PdreApiTestFixtures.cli_testers
+            # create first part of the command
+            cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+            cmd = join(cmdparams, " ")
+
+            # append input
+            cmd = string(cmd, " \"\"")
+
+            if print_verbose
+                println("Running: ", cmd)
+            end
+
+            # Run command
+            output = read(`sh -c $cmd`, String)
+            @test true
+
+            if output != "" && print_verbose
+                println("> Result:\n", output)
+            end
+        end
+    end
+
     cd(root_dir)
 end

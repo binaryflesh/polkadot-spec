@@ -4,15 +4,15 @@ use super::ParsedInput;
 pub fn test_chain_id() {
     let mut api = MiscApi::new();
 
-    let _res = api.rtm_ext_chain_id();
-    // TODO...
+    let res = api.rtm_ext_chain_id();
+    println!("{}", res);
 }
 
 pub fn test_is_validator() {
-    let mut api = MiscApi::new();
+    let mut api = MiscApi::new_with_offchain_context();
 
-    let _res = api.rtm_ext_is_validator();
-    // TODO...
+    let res = api.rtm_ext_is_validator();
+    println!("{}", res);
 }
 
 pub fn test_submit_transaction(_input: ParsedInput) {
@@ -25,10 +25,10 @@ pub fn test_submit_transaction(_input: ParsedInput) {
 }
 
 pub fn test_timestamp() {
-    let mut api = MiscApi::new();
+    let mut api = MiscApi::new_with_offchain_context();
 
-    let _res = api.rtm_ext_timestamp();
-    // TODO...
+    let res = api.rtm_ext_timestamp();
+    println!("{}", res);
 }
 
 pub fn test_sleep_until(_input: ParsedInput) {
@@ -41,10 +41,8 @@ pub fn test_sleep_until(_input: ParsedInput) {
 }
 
 pub fn test_random_seed() {
-    let mut api = MiscApi::new();
+    let mut api = MiscApi::new_with_offchain_context();
 
-    let seed_data = [];
-
-    let _res = api.rtm_ext_random_seed(&seed_data);
-    // TODO...
+    let res = api.rtm_ext_random_seed();
+    println!("{}", hex::encode(res))
 }
