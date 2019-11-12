@@ -1,6 +1,6 @@
 <TeXmacs|1.99.11>
 
-<style|<tuple|tmbook|std-latex|algorithmacs-style>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
 
 <\body>
   <\hide-preamble>
@@ -1434,13 +1434,20 @@
     </algorithmic>
   </algorithm>
 
+  Polkadot RE needs to implement <name|Storage-At-State> in a way that when
+  it's called at <math|H<rsub|h><around|(|B|)>> (as defined in
+  <reference|defn-block-header-hash>) it moves the state storage (as defined
+  in <reference|defn-stored-value>) at end of the execution of all extrinsics
+  of block B.
+
+  \;
+
   In this section, we describe the details upon which the Polkadot RE is
   interacting with the Runtime. In particular, <name|Storage-At-State> and
   <name|Call-Runtime-Entry> procedures called in Algorithm
   <reference|algo-runtime-interaction> are explained in Notation
-  <reference|nota-call-into-runtime> and Definition
-  <reference|defn-storage-at-state> respectively. <math|R<rsub|B>> is the
-  Runtime code loaded from <math|\<cal-S\><rsub|B>>, as described in Notation
+  <reference|nota-call-into-runtime>. <math|R<rsub|B>> is the Runtime code
+  loaded from <math|\<cal-S\><rsub|B>>, as described in Notation
   <reference|nota-runtime-code-at-state>, and
   <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot RE API, as described in
   Notation <reference|nota-re-api-at-state>.
@@ -1976,7 +1983,7 @@
       </state>
 
       <\state>
-        <math|S\<leftarrow\>> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_execute_block>>,B|)>>
+        <math|S\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_execute_block>>,B|)>>
       </state>
 
       <\state>
@@ -5204,7 +5211,10 @@
   can similarly either point to the SCALE encoded data the function returns
   or represent a boolean value (See Sections
   <reference|sect-runtime-send-args-to-runtime-enteries> and
-  <reference|sect-runtime-return-value>).
+  <reference|sect-runtime-return-value>). On errors the Runtime will panic.
+  It's up to the executor to catch that panic.
+
+  \;
 
   In this section, we describe the function of each of the entries alongside
   with the details of the SCALE encoded arguments and the return values for
@@ -5245,7 +5255,7 @@
 
   <strong|Return>:
 
-  A Boolean value indicates if the execution was successful.
+  This function does not return.
 
   <subsection|<verbatim|Core_initialise_block>>
 
@@ -5865,11 +5875,11 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|69>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|69>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|68>>
