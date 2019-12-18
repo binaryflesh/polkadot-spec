@@ -12,8 +12,39 @@ pub use misc::MiscApi;
 
 use parity_scale_codec::Decode;
 use substrate_executor::{call_in_wasm, WasmExecutionMethod};
-use substrate_primitives::Blake2Hasher;
-use substrate_state_machine::TestExternalities;
+use substrate_offchain::testing::TestOffchainExt;
+use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
+use substrate_state_machine::TestExternalities as CoreTestExternalities;
+
+type TestExternalities<H> = CoreTestExternalities<H, u64>;
+
+pub struct Runtime {
+    blob: Vec<u8>,
+    ext: TestExternalities<Blake2Hasher>,
+}
+
+impl Runtime {
+    pub fn new() -> Self {
+        Runtime {
+            blob: get_wasm_blob(),
+            ext: TestExternalities::default(),
+        }
+    }
+    pub fn new_offchain() -> Self {
+        let mut ext = TestExternalities::default();
+        let (offchain, _) = TestOffchainExt::new();
+        ext.register_extension(OffchainExt::new(offchain));
+
+        Runtime {
+            blob: get_wasm_blob(),
+            ext: ext,
+        }
+    }
+    pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
+		let mut extext = self.ext.ext();
+        call_in_wasm(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+    }
+}
 
 // Convenience function, get the wasm blob
 fn get_wasm_blob() -> Vec<u8> {
@@ -31,7 +62,7 @@ fn get_wasm_blob() -> Vec<u8> {
     buffer
 }
 
-trait Decoder {
+pub trait Decoder {
     fn decode_vec(&self) -> Vec<u8>;
     fn decode_u32(&self) -> u32;
     fn decode_u64(&self) -> u64;
@@ -53,14 +84,14 @@ impl Decoder for Vec<u8> {
 }
 
 struct CallWasm<'a> {
-    ext: &'a mut TestExternalities<Blake2Hasher, u64>,
+    ext: &'a mut TestExternalities<Blake2Hasher>,
     blob: &'a [u8],
     method: &'a str,
     //create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
 }
 
 impl<'a> CallWasm<'a> {
-    fn new(ext: &'a mut TestExternalities<Blake2Hasher, u64>, blob: &'a [u8], method: &'a str) -> Self {
+    fn new(ext: &'a mut TestExternalities<Blake2Hasher>, blob: &'a [u8], method: &'a str) -> Self {
         CallWasm {
             ext: ext,
             blob: blob,
