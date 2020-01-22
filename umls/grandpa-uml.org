@@ -131,7 +131,7 @@ Network -> Voter ++ : poll
                           note over VotingRound : ancester ← last_round_estimate
                         end /' primary < pg '/
                       end /' primary = pg '/ 
-                    end /' no priamyr '/
+                    end /' no primary '/
                   return 
 
                   VotingRound -> Environment ++ : best block of best chain containing the anscestor 
